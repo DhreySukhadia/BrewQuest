@@ -1,0 +1,9 @@
+{
+  "extends": "@brewquest/config-typescript/base.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "declaration": true
+  },
+  "include": ["src/**/*"]
+}

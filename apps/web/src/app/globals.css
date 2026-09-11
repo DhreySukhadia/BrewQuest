@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* -----------------------------------------------------------------
+       LIGHT THEME COLOR PALETTE (Warm Coffee & Cream Aesthetics)
+       ----------------------------------------------------------------- */
+    --background: 30 25% 98%; /* Soft warm cream #FDFBF7 */
+    --foreground: 20 30% 12%; /* Dark roasted bean #261B16 */
+
+    --card: 30 20% 96%; /* Cream card background #FAF6F0 */
+    --card-foreground: 20 30% 12%; /* Dark roasted bean */
+
+    --popover: 0 0% 100%; /* Pure white popover */
+    --popover-foreground: 20 30% 12%; /* Dark roasted bean */
+
+    --primary: 22 55% 32%; /* Rich espresso primary #7E3F1F */
+    --primary-foreground: 30 40% 98%; /* Warm cream text */
+
+    --secondary: 32 45% 88%; /* Creamy latte secondary #F3E5D4 */
+    --secondary-foreground: 20 40% 18%; /* Deep roast text */
+
+    --muted: 30 20% 92%; /* Muted warm beige #ECE5DB */
+    --muted-foreground: 20 15% 45%; /* Medium warm gray #87746A */
+
+    --accent: 35 75% 50%; /* Warm golden caramel accent #DC8819 */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
+
+    --destructive: 0 72% 51%; /* Crimson error */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 30 18% 86%; /* Subtle warm border #DDD4C8 */
+    --input: 30 18% 86%; /* Input border */
+    --ring: 22 55% 32%; /* Focus ring matching primary */
+
+    --radius: 0.75rem; /* 12px default border radius */
+
+    /* Custom Coffee Palette Scalars */
+    --coffee-espresso: 20 45% 10%; /* #251610 */
+    --coffee-roast: 22 55% 32%; /* #7E3F1F */
+    --coffee-caramel: 35 75% 50%; /* #DC8819 */
+    --coffee-latte: 32 45% 88%; /* #F3E5D4 */
+    --coffee-cream: 30 25% 98%; /* #FDFBF7 */
+  }
+
+  .dark {
+    /* -----------------------------------------------------------------
+       DARK THEME COLOR PALETTE (Deep Espresso & Dark Chocolate Night)
+       ----------------------------------------------------------------- */
+    --background: 20 35% 7%; /* Deep dark espresso #19100C */
+    --foreground: 30 25% 95%; /* Off-white cream text #FAF6F0 */
+
+    --card: 20 30% 11%; /* Dark chocolate card #231813 */
+    --card-foreground: 30 25% 95%; /* Off-white text */
+
+    --popover: 20 30% 11%;
+    --popover-foreground: 30 25% 95%;
+
+    --primary: 32 65% 55%; /* Radiant warm amber primary #D98836 */
+    --primary-foreground: 20 45% 10%; /* Dark text on primary */
+
+    --secondary: 20 25% 18%; /* Dark roast secondary #382821 */
+    --secondary-foreground: 30 25% 90%; /* Light cream text */
+
+    --muted: 20 20% 16%; /* Muted dark background #2D201A */
+    --muted-foreground: 30 12% 65%; /* Muted warm gray text #A89B93 */
+
+    --accent: 35 80% 55%; /* Golden roast accent #E5952B */
+    --accent-foreground: 20 45% 10%;
+
+    --destructive: 0 62% 42%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 20 25% 20%; /* Dark border #3E2C24 */
+    --input: 20 25% 20%;
+    --ring: 32 65% 55%;
+
+    /* Custom Coffee Palette Scalars (Dark Mode adapt) */
+    --coffee-espresso: 30 25% 95%;
+    --coffee-roast: 32 65% 55%;
+    --coffee-caramel: 35 80% 55%;
+    --coffee-latte: 20 25% 18%;
+    --coffee-cream: 20 35% 7%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground selection:bg-accent selection:text-accent-foreground font-sans antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+/* Custom Design System Utility Classes */
+@layer utilities {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(221, 212, 200, 0.5);
+  }
+
+  .dark .glass-card {
+    background: rgba(35, 24, 19, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(62, 44, 36, 0.5);
+  }
+
+  .shadow-coffee {
+    box-shadow: 0 10px 30px -10px rgba(126, 63, 31, 0.15);
+  }
+
+  .dark .shadow-coffee {
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 25px 2px rgba(220, 136, 25, 0.25);
+  }
+
+  .text-gradient-coffee {
+    @apply from-coffee-roast via-coffee-caramel to-coffee-espresso bg-gradient-to-r bg-clip-text text-transparent;
+  }
+}
