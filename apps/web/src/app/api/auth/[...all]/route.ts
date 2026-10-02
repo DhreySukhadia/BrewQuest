@@ -8,6 +8,8 @@ export async function GET(request: NextRequest) {
   const response = await fetch(forwardUrl, {
     headers: request.headers,
     method: 'GET',
+    // Pass Better Auth redirects (e.g. OAuth callback) and their cookies to the browser.
+    redirect: 'manual',
   });
   return new NextResponse(response.body, {
     status: response.status,
@@ -23,6 +25,7 @@ export async function POST(request: NextRequest) {
     headers: request.headers,
     method: 'POST',
     body,
+    redirect: 'manual',
   });
   return new NextResponse(response.body, {
     status: response.status,
