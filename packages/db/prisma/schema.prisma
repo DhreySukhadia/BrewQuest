@@ -15,17 +15,48 @@ datasource db {
 // Required for Better Auth authentication setup
 // ==========================================
 
-model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+enum Role {
+  USER
+  ADMIN
+}
 
-  sessions      Session[]
-  accounts      Account[]
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum ExperienceTier {
+  BEGINNER
+  INTERMEDIATE
+  EXPLORER
+  ENTHUSIAST
+}
+
+model User {
+  id             String         @id @default(cuid())
+  name           String
+  firstName      String
+  lastName       String?
+  username       String         @unique
+  email          String         @unique
+  emailVerified  Boolean        @default(false)
+  image          String?
+  profilePicture String?
+  role           Role           @default(USER)
+  status         AccountStatus  @default(ACTIVE)
+  experienceTier ExperienceTier @default(BEGINNER)
+  lastLoginAt    DateTime?
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  addedCoffees     Coffee[] @relation("CoffeeAddedByAdmin")
+  submittedCoffees Coffee[] @relation("CoffeeSubmittedByUser")
+  reviewedCoffees  Coffee[] @relation("CoffeeReviewedByAdmin")
 
   @@map("user")
 }
@@ -40,7 +71,7 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }
@@ -60,7 +91,7 @@ model Account {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
@@ -74,4 +105,113 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@map("verification")
+}
+
+// ==========================================
+// BREWQUEST DOMAIN MODELS
+// ==========================================
+
+enum AttributeCategory {
+  FLAVOR
+  AROMA
+  BODY
+  ACIDITY
+  SWEETNESS
+  BITTERNESS
+  FINISH
+  OTHER
+}
+
+model Attribute {
+  id          String            @id @default(cuid())
+  name        String            @unique
+  category    AttributeCategory
+  description String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  coffeeAttributes CoffeeAttribute[]
+
+  @@index([category])
+  @@map("attribute")
+}
+
+enum CoffeeSource {
+  OFFICIAL
+  COMMUNITY
+  USER_CUSTOM
+}
+
+enum CoffeeReviewStatus {
+  DRAFT
+  PENDING_REVIEW
+  VERIFIED
+  REJECTED
+  MERGED
+}
+
+model Roaster {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  coffees Coffee[]
+
+  @@map("roaster")
+}
+
+model Coffee {
+  id   String @id @default(cuid())
+  name String
+
+  // Coffee information
+  roasterId  String?
+  roaster    Roaster? @relation(fields: [roasterId], references: [id])
+  origin     String?
+  region     String?
+  farm       String?
+  altitude   String?
+  variety    String?
+  processing String?
+  roast      String?
+
+  // Source and status
+  source       CoffeeSource
+  reviewStatus CoffeeReviewStatus
+
+  // Confidence / moderation
+  confidenceScore   Float?
+  addedByAdminId    String?
+  addedByAdmin      User?     @relation("CoffeeAddedByAdmin", fields: [addedByAdminId], references: [id])
+  submittedByUserId String?
+  submittedByUser   User?     @relation("CoffeeSubmittedByUser", fields: [submittedByUserId], references: [id])
+  reviewedByAdminId String?
+  reviewedByAdmin   User?     @relation("CoffeeReviewedByAdmin", fields: [reviewedByAdminId], references: [id])
+  reviewedAt        DateTime?
+  reviewNotes       String?
+
+  duplicateOfId String?
+  duplicateOf   Coffee?  @relation("CoffeeDuplicates", fields: [duplicateOfId], references: [id])
+  duplicates    Coffee[] @relation("CoffeeDuplicates")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  coffeeAttributes CoffeeAttribute[]
+
+  @@map("coffee")
+}
+
+model CoffeeAttribute {
+  coffeeId    String
+  attributeId String
+  strength    Float?
+  createdAt   DateTime @default(now())
+
+  coffee    Coffee    @relation(fields: [coffeeId], references: [id], onDelete: Cascade)
+  attribute Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+
+  @@id([coffeeId, attributeId])
+  @@map("coffee_attribute")
 }
