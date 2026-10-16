@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from './lib/auth';
 
@@ -13,6 +13,14 @@ async function bootstrap() {
     origin: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
     credentials: true,
   });
+
+  // Enable global validation pipe for class-validator DTOs
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
 
   // Better Auth handler mount for /api/auth/* requests
   const expressApp = app.getHttpAdapter().getInstance();

@@ -4,6 +4,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { CoffeesModule } from './modules/coffees/coffees.module';
+import { RoastersModule } from './modules/roasters/roasters.module';
+import { AttributesModule } from './modules/attributes/attributes.module';
 import { CoffeeDnaModule } from './modules/coffee-dna/coffee-dna.module';
 import { RecommendationsModule } from './modules/recommendations/recommendations.module';
 import { BrewLogsModule } from './modules/brew-logs/brew-logs.module';
@@ -24,6 +26,8 @@ import databaseConfig from './config/database.config';
     AuthModule,
     UsersModule,
     CoffeesModule,
+    RoastersModule,
+    AttributesModule,
     CoffeeDnaModule,
     RecommendationsModule,
     BrewLogsModule,

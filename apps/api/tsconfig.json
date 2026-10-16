@@ -1,6 +1,7 @@
 {
   "extends": "@brewquest/config-typescript/nestjs.json",
   "compilerOptions": {
+    "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
